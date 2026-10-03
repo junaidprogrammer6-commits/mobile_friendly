@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saved Messages | Junaid Qamar</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  body{padding-top:0}
+  .wrap{max-width:700px;margin:0 auto;padding:40px 18px 80px}
+  .msg-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+  .msg-card .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .msg-card b{font-size:1rem}
+  .msg-card time{color:var(--mut);font-size:.78rem}
+  .msg-card .meta{color:var(--primary);font-size:.82rem;margin-bottom:8px}
+  .msg-card p{color:var(--mut);font-size:.92rem}
+  .empty{color:var(--mut);text-align:center;padding:40px 0}
+  .clear-btn{margin-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p style="margin-bottom:20px"><a href="index.html" style="color:var(--primary);font-weight:600">← Back to website</a></p>
+  <h2 style="margin-bottom:6px">Saved Contact Messages</h2>
+  <p class="sub" style="margin-bottom:24px">Messages saved in this browser's storage (demo only — not shared with anyone else).</p>
+  <div id="list"></div>
+  <button class="btn secondary clear-btn" id="clearBtn">Clear all messages</button>
+</div>
+
+<script>
+(function () {
+  const root = document.documentElement;
+  try { const saved = localStorage.getItem("jq_theme"); if (saved) root.dataset.theme = saved; } catch {}
+})();
+
+const KEY = "jq_contact_messages";
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+}
+function render() {
+  const list = document.getElementById("list");
+  let messages = [];
+  try { messages = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch {}
+  if (messages.length === 0) {
+    list.innerHTML = '<p class="empty">No messages saved yet. Submit the contact form on the main page first.</p>';
+    return;
+  }
+  list.innerHTML = messages.map(m => `
+    <div class="msg-card">
+      <div class="top"><b>${escapeHtml(m.name)}</b><time>${new Date(m.date).toLocaleString()}</time></div>
+      <div class="meta">${escapeHtml(m.email)}${m.business ? " · " + escapeHtml(m.business) : ""}</div>
+      <p>${escapeHtml(m.message)}</p>
+    </div>
+  `).join("");
+}
+document.getElementById("clearBtn").addEventListener("click", () => {
+  if (confirm("Clear all saved messages?")) {
+    localStorage.removeItem(KEY);
+    render();
+  }
+});
+render();
+</script>
+</body>
+</html>
