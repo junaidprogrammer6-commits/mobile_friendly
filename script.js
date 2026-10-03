@@ -108,7 +108,7 @@ form.addEventListener("submit", (e) => {
 
   formMsg.textContent = `Thanks ${name}! Your message was saved. Opening your email app...`;
   const body = `${message}\n\nFrom: ${name}\nEmail: ${email}\nBusiness: ${business || "-"}`;
-  window.location.href = `mailto:hello@junaidqamar.example?subject=${encodeURIComponent("New project inquiry from " + name)}&body=${encodeURIComponent(body)}`;
+  window.location.href = `mailto:junaidprogrammer6@gmail.com?subject=${encodeURIComponent("New project inquiry from " + name)}&body=${encodeURIComponent(body)}`;
 
   form.reset();
   setTimeout(() => (formMsg.textContent = ""), 5000);
